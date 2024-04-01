@@ -1,4 +1,5 @@
 before_install:
  - source "$HOME/.sdkman/bin/sdkman-init.sh"
  - sdk update
- - sdk upgrade
+ - sdk install java
+ - sdk install maven
