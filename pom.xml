@@ -26,9 +26,9 @@
 	</licenses>
 
 	<scm>
-		<connection>scm:git:git@github.com:sovlookup/docx-template.git</connection>
-		<developerConnection>scm:git:git@github.com:sovlookup/docx-template.git</developerConnection>
-		<url>git@github.com:sovlookup/docx-template.git</url>
+		<connection>scm:git:git@github.com:SOVLOOKUP/docx-template.git</connection>
+		<developerConnection>scm:git:git@github.com:SOVLOOKUP/docx-template.git</developerConnection>
+		<url>git@github.com:SOVLOOKUP/docx-template.git</url>
 	</scm>
 
 	<properties>
