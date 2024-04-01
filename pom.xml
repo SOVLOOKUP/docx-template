@@ -9,9 +9,9 @@
 		<version>7</version>
 	</parent>
 
-	<groupId>com.sovlookup</groupId>
+	<groupId>com.github.SOVLOOKUP</groupId>
 	<artifactId>docx-template</artifactId>
-	<version>1.0.0</version>
+	<version>1.0.1</version>
 	<packaging>jar</packaging>
 
 	<name>docx-template</name>

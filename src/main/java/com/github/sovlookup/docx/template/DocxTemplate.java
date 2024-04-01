@@ -1,4 +1,4 @@
-package com.sovlookup.docx.template;
+package com.github.sovlookup.docx.template;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
