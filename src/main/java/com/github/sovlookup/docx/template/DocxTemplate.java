@@ -5,6 +5,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Type;
+import java.util.Base64;
 import java.util.List;
 import java.util.Map;
 
@@ -30,6 +31,8 @@ public class DocxTemplate {
     private Configure configure;
     private static final Type TYPE = new TypeToken<Map<String, Object>>() {
     }.getType();
+    private static final Base64.Decoder decoder = Base64.getDecoder();
+    private static final Base64.Encoder encoder = Base64.getEncoder();
     {
         ConfigureBuilder builder = Configure.builder();
         this.gsonHandler = new DefaultGsonHandler() {
@@ -63,15 +66,16 @@ public class DocxTemplate {
         this.configure = builder.build();
     }
 
-    public void run(String template, String output, String jsonStr) throws IOException {
+    public void renderFile(String template, String output, String jsonStr) throws IOException {
         XWPFTemplate.compile(template,
                 this.configure)
                 .render(this.gsonHandler.castJsonToType(jsonStr, TYPE))
                 .writeToFile(output);
     }
 
-    public byte[] runByte(byte[] template, String jsonStr) throws IOException {
-        InputStream input = new ByteArrayInputStream(template);
+    public String render(String template, String jsonStr) throws IOException {
+        byte[] input_bytes = decoder.decode(template);
+        InputStream input = new ByteArrayInputStream(input_bytes);
         ByteArrayOutputStream output = new ByteArrayOutputStream();
 
         XWPFTemplate.compile(
@@ -80,6 +84,6 @@ public class DocxTemplate {
                 .render(this.gsonHandler.castJsonToType(jsonStr, TYPE))
                 .write(output);
 
-        return output.toByteArray();
+        return encoder.encodeToString(output.toByteArray());
     }
 }

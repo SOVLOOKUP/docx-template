@@ -1,20 +1,18 @@
 package com.github.SOVLOOKUP.docx.template;
 
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.Base64;
 import java.util.concurrent.ExecutionException;
 
 import org.junit.jupiter.api.Test;
 
 public class DocxTemplateTest {
     DocxTemplate dt;
+    private static final Base64.Decoder decoder = Base64.getDecoder();
+    private static final Base64.Encoder encoder = Base64.getEncoder();
     {
         this.dt = new DocxTemplate();
     }
@@ -22,23 +20,15 @@ public class DocxTemplateTest {
     @Test
     public void test() throws IOException {
         String content = new String(Files.readAllBytes(Paths.get("src/test/resources/data.json")));
-        this.dt.run("src/test/resources/template.docx", "target/out.docx", content);
+        this.dt.renderFile("src/test/resources/template.docx", "target/out.docx", content);
     }
 
     @Test
-    public void test2() throws IOException, InterruptedException, ExecutionException {
+    public void test2() throws IOException, InterruptedException,
+            ExecutionException {
         String content = new String(Files.readAllBytes(Paths.get("src/test/resources/data.json")));
-        File file = new File("src/test/resources/template.docx");
-        File out = new File("target/out2.docx");
-        OutputStream output = new FileOutputStream(out);
-
-        try (BufferedOutputStream bufferedOutput = new BufferedOutputStream(output)) {
-            try (InputStream input = new FileInputStream(file)) {
-                byte[] byt = new byte[input.available()];
-                input.read(byt);
-
-                bufferedOutput.write(this.dt.runByte(byt, content));
-            }
-        }
+        String file = encoder.encodeToString(Files.readAllBytes(Paths.get("src/test/resources/template.docx")));
+        String out = this.dt.render(file, content);
+        Files.write(Paths.get("target/out2.docx"), decoder.decode(out));
     }
 }
