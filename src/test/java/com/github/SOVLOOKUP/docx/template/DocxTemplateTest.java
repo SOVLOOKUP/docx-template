@@ -27,7 +27,16 @@ public class DocxTemplateTest {
             ExecutionException {
         String content = new String(Files.readAllBytes(Paths.get("src/test/resources/data.json")));
         String file = encoder.encodeToString(Files.readAllBytes(Paths.get("src/test/resources/template.docx")));
-        String out = this.dt.render(file, content);
+        String out = this.dt.renderBase64(file, content);
         Files.write(Paths.get("target/out2.docx"), decoder.decode(out));
+    }
+
+    @Test
+    public void test3() throws IOException, InterruptedException,
+            ExecutionException {
+        String content = new String(Files.readAllBytes(Paths.get("src/test/resources/data.json")));
+        byte[] file = Files.readAllBytes(Paths.get("src/test/resources/template.docx"));
+        byte[] out = this.dt.renderByte(file, content);
+        Files.write(Paths.get("target/out3.docx"), out);
     }
 }

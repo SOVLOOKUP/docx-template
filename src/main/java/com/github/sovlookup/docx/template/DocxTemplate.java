@@ -73,9 +73,8 @@ public class DocxTemplate {
                 .writeToFile(output);
     }
 
-    public String render(String template, String jsonStr) throws IOException {
-        byte[] input_bytes = decoder.decode(template);
-        InputStream input = new ByteArrayInputStream(input_bytes);
+    public byte[] renderByte(byte[] template, String jsonStr) throws IOException {
+        InputStream input = new ByteArrayInputStream(template);
         ByteArrayOutputStream output = new ByteArrayOutputStream();
 
         XWPFTemplate.compile(
@@ -84,6 +83,13 @@ public class DocxTemplate {
                 .render(this.gsonHandler.castJsonToType(jsonStr, TYPE))
                 .write(output);
 
-        return encoder.encodeToString(output.toByteArray());
+        return output.toByteArray();
+    }
+
+    public String renderBase64(String template, String jsonStr) throws IOException {
+        byte[] input_bytes = decoder.decode(template);
+
+        return encoder.encodeToString(
+                this.renderByte(input_bytes, jsonStr));
     }
 }
