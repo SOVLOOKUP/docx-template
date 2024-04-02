@@ -39,4 +39,12 @@ public class DocxTemplateTest {
         byte[] out = this.dt.renderByte(file, content);
         Files.write(Paths.get("target/out3.docx"), out);
     }
+
+    @Test
+    public void test4() throws IOException, InterruptedException,
+            ExecutionException {
+        String file = encoder.encodeToString(Files.readAllBytes(Paths.get("src/test/resources/template.docx")));
+        System.out.println(
+                this.dt.templateMeta(file));
+    }
 }

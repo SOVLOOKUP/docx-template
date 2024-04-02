@@ -5,6 +5,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
 import java.util.Map;
@@ -125,5 +126,18 @@ public class DocxTemplate {
 
         return encoder.encodeToString(
                 this.renderByte(input_bytes, jsonStr));
+    }
+
+    public List<String> templateMeta(String template) throws IOException {
+        byte[] input_bytes = decoder.decode(template);
+        InputStream input = new ByteArrayInputStream(input_bytes);
+        List<String> datelist = new ArrayList<String>();
+
+        XWPFTemplate.compile(
+                input,
+                this.configure)
+                .getElementTemplates().forEach((i) -> datelist.add(i.variable()));
+
+        return datelist;
     }
 }
