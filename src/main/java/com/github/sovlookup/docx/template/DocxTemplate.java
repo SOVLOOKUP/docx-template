@@ -73,6 +73,40 @@ public class DocxTemplate {
                 .writeToFile(output);
     }
 
+    private byte[] toPrimitives(Byte[] oBytes) {
+        byte[] bytes = new byte[oBytes.length];
+
+        for (int i = 0; i < oBytes.length; i++) {
+            bytes[i] = oBytes[i];
+        }
+
+        return bytes;
+    }
+
+    // byte[] to Byte[]
+    private Byte[] toObjects(byte[] bytesPrim) {
+        Byte[] bytes = new Byte[bytesPrim.length];
+
+        int i = 0;
+        for (byte b : bytesPrim)
+            bytes[i++] = b; // Autoboxing
+
+        return bytes;
+    }
+
+    public Byte[] renderByte(Byte[] template, String jsonStr) throws IOException {
+        InputStream input = new ByteArrayInputStream(toPrimitives(template));
+        ByteArrayOutputStream output = new ByteArrayOutputStream();
+
+        XWPFTemplate.compile(
+                input,
+                this.configure)
+                .render(this.gsonHandler.castJsonToType(jsonStr, TYPE))
+                .write(output);
+
+        return toObjects(output.toByteArray());
+    }
+
     public byte[] renderByte(byte[] template, String jsonStr) throws IOException {
         InputStream input = new ByteArrayInputStream(template);
         ByteArrayOutputStream output = new ByteArrayOutputStream();
