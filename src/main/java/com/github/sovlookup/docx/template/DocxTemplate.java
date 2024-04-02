@@ -70,7 +70,7 @@ public class DocxTemplate {
                 .writeToFile(output);
     }
 
-    public byte[] run_byte(byte[] template, String jsonStr) throws IOException {
+    public byte[] runByte(byte[] template, String jsonStr) throws IOException {
         InputStream input = new ByteArrayInputStream(template);
         ByteArrayOutputStream output = new ByteArrayOutputStream();
 

@@ -37,7 +37,7 @@ public class DocxTemplateTest {
                 byte[] byt = new byte[input.available()];
                 input.read(byt);
 
-                bufferedOutput.write(this.dt.run_byte(byt, content));
+                bufferedOutput.write(this.dt.runByte(byt, content));
             }
         }
     }
