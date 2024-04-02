@@ -7,9 +7,6 @@ import java.io.InputStream;
 import java.lang.reflect.Type;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 import com.deepoove.poi.XWPFTemplate;
 import com.deepoove.poi.config.Configure;
@@ -33,9 +30,6 @@ public class DocxTemplate {
     private Configure configure;
     private static final Type TYPE = new TypeToken<Map<String, Object>>() {
     }.getType();
-
-    private static ExecutorService executor = Executors.newSingleThreadExecutor();
-
     {
         ConfigureBuilder builder = Configure.builder();
         this.gsonHandler = new DefaultGsonHandler() {
@@ -76,11 +70,9 @@ public class DocxTemplate {
                 .writeToFile(output);
     }
 
-    public CompletableFuture<byte[]> run_byte(byte[] template, String jsonStr) throws IOException {
+    public byte[] run_byte(byte[] template, String jsonStr) throws IOException {
         InputStream input = new ByteArrayInputStream(template);
         ByteArrayOutputStream output = new ByteArrayOutputStream();
-
-        CompletableFuture<byte[]> completableFuture = new CompletableFuture<>();
 
         XWPFTemplate.compile(
                 input,
@@ -88,11 +80,6 @@ public class DocxTemplate {
                 .render(this.gsonHandler.castJsonToType(jsonStr, TYPE))
                 .write(output);
 
-        executor.submit(() -> {
-            completableFuture.complete(output.toByteArray());
-            return null;
-        });
-
-        return completableFuture;
+        return output.toByteArray();
     }
 }
